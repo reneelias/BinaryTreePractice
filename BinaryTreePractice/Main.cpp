@@ -14,6 +14,7 @@ Node* Insert(int data, Node* node);
 int Size(Node* node);
 int MaxDepth(Node* node);
 int MinValue(Node* node);
+int MaxValue(Node* node);
 void PrintTree(Node* node);
 void PrintPostorder(Node* node);
 int HasPathSum(Node* node, int sum);
@@ -23,6 +24,8 @@ void Mirror(Node* node);
 void DoubleTree(Node* node);
 int SameTree(Node* nodeA, Node* nodeB);
 int CountTrees(int numKeys);
+int CountTreesRecur(int currentNumber, int maxNum);
+int IsBST(Node* node);
 
 int main()
 {
@@ -40,6 +43,9 @@ int main()
 	Insert(-15, node);
 	Insert(-9, node);
 	Insert(-8, node);
+	//node->right->right->right->right = NewNode(1);
+	//node->right->right->left->right = NewNode(1);
+	node->left->right = NewNode(3);
 
 	Node* nodeB = Insert(2, NULL);
 	Insert(1, nodeB);
@@ -70,6 +76,7 @@ int main()
 	cout << "\n\nSize: " << Size(node) << endl;
 	cout << "Max Depth: " << MaxDepth(node) << endl;
 	cout << "Min Value: " << MinValue(node) << endl;
+	cout << "Max Value: " << MaxValue(node) << endl;
 	PrintTree(node);
 	cout << endl;
 	PrintPostorder(node);
@@ -83,6 +90,9 @@ int main()
 	//DoubleTree(node);
 	//PrintPaths(node);
 	cout << "Trees the same: " << SameTree(node, nodeB) << endl;
+	int amountOfUniqueNums = 2;
+	cout << "Number of possible trees when there are " << amountOfUniqueNums << " unique numbers: " << CountTrees(amountOfUniqueNums) << endl;
+	cout << "Is BST: " << IsBST(node) << endl;
 }
 
 Node* NewNode(int data)
@@ -165,14 +175,22 @@ int MaxDepth(Node* node)
 
 int MinValue(Node* node)
 {
-	Node* currentNode = node;
-
-	while (currentNode->left != NULL)
+	while (node->left != NULL)
 	{
-		currentNode = currentNode->left;
+		node = node->left;
 	}
 
-	return currentNode->data;
+	return node->data;
+}
+
+int MaxValue(Node* node)
+{
+	while (node->right != NULL)
+	{
+		node = node->right;
+	}
+
+	return node->data;
 }
 
 void PrintTree(Node* node)
@@ -330,5 +348,46 @@ int SameTree(Node* nodeA, Node* nodeB)
 
 int CountTrees(int numKeys)
 {
+	int count = 0;
+	for (int i = 1; i < numKeys; i++)
+	{
+		count += CountTreesRecur(i, numKeys);
+	}
+	return count;
+}
 
+int CountTreesRecur(int startingNumber, int maxNum)
+{
+	if (startingNumber == maxNum)
+	{
+		return 1;
+	}
+	int count = 0;
+	count += maxNum - startingNumber;
+	startingNumber++;
+
+	
+	count += CountTreesRecur(startingNumber, maxNum);
+
+	return count;
+}
+
+int IsBST(Node* node)
+{
+	if (node == NULL)
+	{
+		return 1;
+	}
+	int bst = 0;
+	if (node->data >= MinValue(node) && node->data <= MaxValue(node))
+	{
+		bst = IsBST(node->left);
+		if (bst == 0)
+		{
+			return bst;
+		}
+		bst = IsBST(node->right);
+	}
+
+	return bst;
 }
