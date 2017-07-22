@@ -26,6 +26,8 @@ int SameTree(Node* nodeA, Node* nodeB);
 int CountTrees(int numKeys);
 int CountTreesRecur(int currentNumber, int maxNum);
 int IsBST(Node* node);
+int IsBST2(Node* node);
+int IsBSTRecur(Node* node, int min, int max);
 
 int main()
 {
@@ -43,9 +45,12 @@ int main()
 	Insert(-15, node);
 	Insert(-9, node);
 	Insert(-8, node);
+	Insert(15, node);
 	//node->right->right->right->right = NewNode(1);
+	//node->right->left = NewNode(10);
 	//node->right->right->left->right = NewNode(1);
-	node->left->right = NewNode(3);
+	//node->left->right = NewNode(3);
+	//node->left->left->left->right = NewNode(15);
 
 	Node* nodeB = Insert(2, NULL);
 	Insert(1, nodeB);
@@ -61,6 +66,7 @@ int main()
 	Insert(-9, nodeB);
 	Insert(-8, nodeB);
 
+	//cout << "suh dood" << endl;
 	/*cout << node->data << endl;
 	cout << node->left->data << endl;
 	cout << node->left->left->data << endl;
@@ -81,8 +87,8 @@ int main()
 	cout << endl;
 	PrintPostorder(node);
 	cout << endl;
-	int sum = -34;
-	cout << "Contains " << sum << ": " << HasPathSum(node, sum) << endl;
+	int sum = 29;
+	cout << "Contains sum of " << sum << " along any path: " << HasPathSum(node, sum) << endl;
 	PrintPaths(node);
 	Mirror(node);
 	PrintPaths(node);
@@ -90,9 +96,10 @@ int main()
 	//DoubleTree(node);
 	//PrintPaths(node);
 	cout << "Trees the same: " << SameTree(node, nodeB) << endl;
-	int amountOfUniqueNums = 2;
+	int amountOfUniqueNums = 3;
 	cout << "Number of possible trees when there are " << amountOfUniqueNums << " unique numbers: " << CountTrees(amountOfUniqueNums) << endl;
-	cout << "Is BST: " << IsBST(node) << endl;
+	cout << "Is BST: " << IsBST2(node) << endl;
+	//system("pause");
 }
 
 Node* NewNode(int data)
@@ -374,20 +381,60 @@ int CountTreesRecur(int startingNumber, int maxNum)
 
 int IsBST(Node* node)
 {
+	Node* currentNode = node;
+	int max = node->data;
+	int min = MinValue(node);
+
+	while (currentNode->left != NULL)
+	{
+		currentNode = currentNode->left;
+		if (currentNode->data > max || currentNode->data < min)
+		{
+			return 0;
+		}
+	}
+	currentNode = node;
+	//while(currentNode->left)
+}
+
+int IsBST2(Node* node)
+{
+	return IsBSTRecur(node->left, MinValue(node), node->data) ? IsBSTRecur(node->right, node->data, MaxValue(node)) : 0;
+}
+
+int IsBSTRecur(Node* node, int min, int max)
+{
 	if (node == NULL)
 	{
 		return 1;
 	}
-	int bst = 0;
-	if (node->data >= MinValue(node) && node->data <= MaxValue(node))
+	if (node->data < min || node->data > max)
 	{
-		bst = IsBST(node->left);
-		if (bst == 0)
-		{
-			return bst;
-		}
-		bst = IsBST(node->right);
+		return 0;
 	}
-
-	return bst;
+	bool isBST = 0;
+	isBST = IsBSTRecur(node->left, min, node->data);
+	if (!isBST)
+	{
+		return isBST;
+	}
+	isBST = IsBSTRecur(node->right, node->data, max);
+	return isBST;
 }
+
+//if (node == NULL)
+//{
+//	return 1;
+//}
+//int bst = 0;
+//if (node->data >= MinValue(node) && node->data <= MaxValue(node))
+//{
+//	bst = IsBST(node->left);
+//	if (bst == 0)
+//	{
+//		return bst;
+//	}
+//	bst = IsBST(node->right);
+//}
+//
+//return bst;
