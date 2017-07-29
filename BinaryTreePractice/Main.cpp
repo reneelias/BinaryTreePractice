@@ -11,6 +11,7 @@ struct Node {
 Node* NewNode(int data);
 int Lookup(int data, Node* node);
 Node* Insert(int data, Node* node);
+Node* Delete(int data, Node* node, Node* topNode);
 int Size(Node* node);
 int MaxDepth(Node* node);
 int MinValue(Node* node);
@@ -29,6 +30,7 @@ int IsBST(Node* node);
 int IsBST2(Node* node);
 int IsBSTRecur(Node* node, int min, int max);
 
+
 int main()
 {
 	
@@ -46,6 +48,8 @@ int main()
 	Insert(-9, node);
 	Insert(-8, node);
 	Insert(15, node);
+	Insert(1, node);
+
 	//node->right->right->right->right = NewNode(1);
 	//node->right->left = NewNode(10);
 	//node->right->right->left->right = NewNode(1);
@@ -65,6 +69,12 @@ int main()
 	Insert(-15, nodeB);
 	Insert(-9, nodeB);
 	Insert(-8, nodeB);
+
+	Node* nodeC = Insert(6, NULL);
+	Insert(3, nodeC);
+	Insert(7, nodeC);
+	Insert(4, nodeC);
+	Insert(5, nodeC);
 
 	//cout << "suh dood" << endl;
 	/*cout << node->data << endl;
@@ -99,6 +109,13 @@ int main()
 	int amountOfUniqueNums = 3;
 	cout << "Number of possible trees when there are " << amountOfUniqueNums << " unique numbers: " << CountTrees(amountOfUniqueNums) << endl;
 	cout << "Is BST: " << IsBST2(node) << endl;
+	node = Delete(2, node, node);
+	PrintTree(node);
+	cout << endl;
+	PrintTree(nodeC);
+	cout << endl;
+	nodeC = Delete(6, nodeC, nodeC);
+	PrintTree(nodeC);
 	//system("pause");
 }
 
@@ -147,6 +164,80 @@ Node* Insert(int data, Node* node)
 		node->left = Insert(data, node->left);
 	}
 	return node;
+}
+
+Node* Delete(int data, Node* node, Node* topNode)
+{
+	if (node == NULL)
+	{
+		return topNode;
+	}
+	if (node->data == data && node == topNode)
+	{
+		if (node->left != NULL)
+		{
+
+			Node* temp = node->left;
+			Node* previous = temp;
+			while (temp->right != NULL)
+			{
+				previous = temp;
+				temp = temp->right;
+			}
+			previous->right = NULL;
+			temp->right = topNode->right;
+			//temp->left = topNode->left;
+			return temp;
+		}
+		else
+		{
+			return node->right;
+		}
+	}
+	if (node->left != NULL)
+	{
+		if (node->left->data == data)
+		{
+			if (node->left->left != NULL)
+			{
+				node->left = node->left->left;
+			}
+			else if (node->left->right != NULL)
+			{
+				node->left = node->left->right;
+			}
+			else
+			{
+				node->left = NULL;
+			}
+			return topNode;
+		}
+	}
+	if (node->right != NULL)
+	{
+		if (node->right->data == data)
+		{
+			if (node->right->left != NULL)
+			{
+				node->right = node->right->left;
+			}
+			else if (node->right->right != NULL)
+			{
+				node->right = node->right->right;
+			}
+			else
+			{
+				node->right = NULL;
+			}
+			return topNode;
+		}
+	}
+	
+
+	Delete(data, node->left, topNode);
+	Delete(data, node->right, topNode);
+
+	return topNode;
 }
 
 
@@ -383,7 +474,7 @@ int IsBST(Node* node)
 {
 	Node* currentNode = node;
 	int max = node->data;
-	int min = MinValue(node);
+	int min = MinValue(node);                     
 
 	while (currentNode->left != NULL)
 	{
