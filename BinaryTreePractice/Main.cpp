@@ -75,6 +75,8 @@ int main()
 	Insert(7, nodeC);
 	Insert(4, nodeC);
 	Insert(5, nodeC);
+	Insert(1, nodeC);
+	Insert(2, nodeC);
 
 	//cout << "suh dood" << endl;
 	/*cout << node->data << endl;
@@ -114,7 +116,7 @@ int main()
 	cout << endl;
 	PrintTree(nodeC);
 	cout << endl;
-	nodeC = Delete(6, nodeC, nodeC);
+	Delete(3, nodeC, nodeC);
 	PrintTree(nodeC);
 	//system("pause");
 }
@@ -185,9 +187,8 @@ Node* Delete(int data, Node* node, Node* topNode)
 				temp = temp->right;
 			}
 			previous->right = NULL;
-			temp->right = topNode->right;
-			//temp->left = topNode->left;
-			return temp;
+			topNode->data = temp->data;
+			return topNode;
 		}
 		else
 		{
@@ -200,11 +201,13 @@ Node* Delete(int data, Node* node, Node* topNode)
 		{
 			if (node->left->left != NULL)
 			{
-				node->left = node->left->left;
+				node->left->data = node->left->left->data;
+				node->left->left = NULL;
 			}
 			else if (node->left->right != NULL)
 			{
-				node->left = node->left->right;
+				node->left->data = node->left->right->data;
+				node->left->right = NULL;
 			}
 			else
 			{
@@ -219,11 +222,13 @@ Node* Delete(int data, Node* node, Node* topNode)
 		{
 			if (node->right->left != NULL)
 			{
-				node->right = node->right->left;
+				node->right->data = node->right->left->data;
+				node->right->left = NULL;
 			}
 			else if (node->right->right != NULL)
 			{
-				node->right = node->right->right;
+				node->right->data = node->right->right->data;
+				node->right->right = NULL;
 			}
 			else
 			{

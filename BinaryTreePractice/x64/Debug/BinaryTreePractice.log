@@ -1,4 +1,4 @@
 ﻿  Main.cpp
-c:\users\visitordl12\documents\github\binarytreepractice\binarytreepractice\main.cpp(489): warning C4715: 'IsBST': not all control paths return a value
-  BinaryTreePractice.vcxproj -> C:\Users\VisitorDL12\Documents\GitHub\BinaryTreePractice\x64\Debug\BinaryTreePractice.exe
-  BinaryTreePractice.vcxproj -> C:\Users\VisitorDL12\Documents\GitHub\BinaryTreePractice\x64\Debug\BinaryTreePractice.pdb (Partial PDB)
+c:\users\rene__000\documents\github\binarytreepractice\binarytreepractice\main.cpp(494): warning C4715: 'IsBST': not all control paths return a value
+  BinaryTreePractice.vcxproj -> C:\Users\rene__000\Documents\GitHub\BinaryTreePractice\x64\Debug\BinaryTreePractice.exe
+  BinaryTreePractice.vcxproj -> C:\Users\rene__000\Documents\GitHub\BinaryTreePractice\x64\Debug\BinaryTreePractice.pdb (Partial PDB)
